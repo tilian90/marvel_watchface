@@ -1,0 +1,57 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "tilian90@yandex.ru",
+    "enableMultiJS": false,
+    "longName": "MARVEL_WATCHFACE",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/pebble_logo.png",
+                "menuIcon": true,
+                "name": "RESOURCE_ID_LOGO",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
+                "file": "images/bt-icon.png",
+                "name": "RESOURCE_ID_IMAGE_BT",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
+                "file": "fonts/ROBO.ttf",
+                "name": "RESOURCE_ID_ROBO_24",
+                "targetPlatforms": null,
+                "type": "font"
+            },
+            {
+                "file": "fonts/ROBO.ttf",
+                "name": "RESOURCE_ID_ROBO_42",
+                "targetPlatforms": null,
+                "type": "font"
+            },
+            {
+                "file": "images/background.png",
+                "name": "RESOURCE_ID_IMAGE_BACKGROUND",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "MARVEL_WATCHFACE",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "77446df8-a3bd-4cbb-8afc-e9b271e442d0",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
