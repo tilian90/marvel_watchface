@@ -3,8 +3,9 @@
 static Window *s_main_window;
 static TextLayer *s_time_layer, *s_date_layer;
 static GFont s_time_font, s_date_font;
-static GBitmap *s_background_bitmap, *s_bt_icon_bitmap;
-static BitmapLayer *s_background_layer, *s_bt_icon_layer;
+static GBitmap *s_background_bitmap, *s_bt_icon_bitmap, *s_captain_bitmap;
+static BitmapLayer *s_background_layer, *s_bt_icon_layer, *s_captain_layer;
+static int8_t switcher;
 
 static void update_time() {
   // Get a tm structure
@@ -30,8 +31,27 @@ static void bluetooth_callback(bool connected){
   
   if(!connected){
     vibes_double_pulse();
-  }else{
-    vibes_long_pulse();
+  }
+  
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+  // A tap event occured
+  switch(switcher){
+    case 0:
+    layer_set_hidden(bitmap_layer_get_layer(s_background_layer), true);
+    layer_set_hidden(bitmap_layer_get_layer(s_captain_layer), false);
+    switcher = 1;
+    break;
+    case 1:
+    layer_set_hidden(bitmap_layer_get_layer(s_background_layer), false);
+    layer_set_hidden(bitmap_layer_get_layer(s_captain_layer), true);
+    switcher = 0;
+    break;
+    default:
+    layer_set_hidden(bitmap_layer_get_layer(s_background_layer), true);
+    layer_set_hidden(bitmap_layer_get_layer(s_captain_layer), false);
+    switcher = 1;
   }
 }
 
@@ -71,17 +91,24 @@ static void main_window_load(Window *window) {
   // Create GBitmap
   s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_IMAGE_BACKGROUND);
   s_bt_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_IMAGE_BT);
+  s_captain_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_CAPTAIN);
   
   // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
   s_bt_icon_layer = bitmap_layer_create(GRect(114, 0, 30, 30));
+  s_captain_layer = bitmap_layer_create(bounds);
   
   // Set the bitmap onto the layer and add to the window
-  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
-  layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
+  //BT icon
   bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
-  
+  //Captain
+  bitmap_layer_set_bitmap(s_captain_layer, s_captain_bitmap);
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_captain_layer));
+  //Iron man
+  bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
+   
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
@@ -102,15 +129,20 @@ static void main_window_unload(Window *window) {
   // Destroy GBitmap
   gbitmap_destroy(s_background_bitmap);
   gbitmap_destroy(s_bt_icon_bitmap);
+  gbitmap_destroy(s_captain_bitmap);
   
   // Destroy BitmapLayer
   bitmap_layer_destroy(s_background_layer);
   bitmap_layer_destroy(s_bt_icon_layer);
+  bitmap_layer_destroy(s_captain_layer);
   
 }
 
 
 static void init() {
+  //Setting switcher to 0
+  switcher = 0;
+  
   // Create main Window element and assign to pointer
   s_main_window = window_create();
 
@@ -128,6 +160,9 @@ static void init() {
 
   // Register with TickTimerService
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler); 
+  
+  // Subscribe to tap events
+  accel_tap_service_subscribe(accel_tap_handler);
   
   connection_service_subscribe((ConnectionHandlers){
     .pebble_app_connection_handler = bluetooth_callback

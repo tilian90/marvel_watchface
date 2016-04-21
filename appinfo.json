@@ -10,6 +10,12 @@
     "resources": {
         "media": [
             {
+                "file": "images/captain.png",
+                "name": "RESOURCE_ID_CAPTAIN",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
                 "file": "images/pebble_logo.png",
                 "menuIcon": true,
                 "name": "RESOURCE_ID_LOGO",
