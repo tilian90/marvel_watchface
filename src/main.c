@@ -99,15 +99,15 @@ static void main_window_load(Window *window) {
   s_captain_layer = bitmap_layer_create(bounds);
   
   // Set the bitmap onto the layer and add to the window
-  //BT icon
-  bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
-  layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
   //Captain
   bitmap_layer_set_bitmap(s_captain_layer, s_captain_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_captain_layer));
   //Iron man
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
+  //BT icon
+  bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
+  layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
    
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
