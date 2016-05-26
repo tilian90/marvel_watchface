@@ -30,13 +30,13 @@
             },
             {
                 "file": "fonts/ROBO.ttf",
-                "name": "RESOURCE_ID_ROBO_24",
+                "name": "RESOURCE_ID_ROBO_42",
                 "targetPlatforms": null,
                 "type": "font"
             },
             {
                 "file": "fonts/ROBO.ttf",
-                "name": "RESOURCE_ID_ROBO_42",
+                "name": "RESOURCE_ID_ROBO_23",
                 "targetPlatforms": null,
                 "type": "font"
             },

@@ -6,6 +6,7 @@ static GFont s_time_font, s_date_font;
 static GBitmap *s_background_bitmap, *s_bt_icon_bitmap, *s_captain_bitmap;
 static BitmapLayer *s_background_layer, *s_bt_icon_layer, *s_captain_layer;
 static int8_t switcher;
+static int s_battery_level;
 
 static void update_time() {
   // Get a tm structure
@@ -25,9 +26,22 @@ static void update_time() {
   text_layer_set_text(s_date_layer, date_buffer);
 }
 
+static void battery_callback(BatteryChargeState state){
+  // Record the new battery level
+  s_battery_level = state.charge_percent;
+}
+
 static void bluetooth_callback(bool connected){
   // Show icon if disconnected
   layer_set_hidden(bitmap_layer_get_layer(s_bt_icon_layer), connected);
+    
+  if(connected){
+    text_layer_set_background_color(s_time_layer, GColorClear);
+    text_layer_set_text_color(s_time_layer, GColorBlack);
+  }else{
+    text_layer_set_background_color(s_time_layer, GColorBlack);
+    text_layer_set_text_color(s_time_layer, GColorClear);
+  }
   
   if(!connected){
     vibes_double_pulse();
@@ -62,7 +76,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 static void main_window_load(Window *window) {
   // Create GFont
   s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_RESOURCE_ID_ROBO_42));
-  s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_RESOURCE_ID_ROBO_24));
+  s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_RESOURCE_ID_ROBO_23));
   
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
@@ -72,7 +86,7 @@ static void main_window_load(Window *window) {
   s_time_layer = text_layer_create(
       GRect(0, PBL_IF_ROUND_ELSE(58, 124), bounds.size.w, 50));
   
-  s_date_layer = text_layer_create(GRect(0, 100, 144, 30));
+  s_date_layer = text_layer_create(GRect(0, 100, 144, 28));
   
   text_layer_set_background_color(s_date_layer, GColorBlack);
   text_layer_set_text_color(s_date_layer, GColorWhite);
@@ -96,6 +110,7 @@ static void main_window_load(Window *window) {
   // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
   s_bt_icon_layer = bitmap_layer_create(GRect(114, 0, 30, 30));
+  
   s_captain_layer = bitmap_layer_create(bounds);
   
   // Set the bitmap onto the layer and add to the window
@@ -107,7 +122,7 @@ static void main_window_load(Window *window) {
   layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
   //BT icon
   bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
-  layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
+  //layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
    
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
@@ -115,6 +130,9 @@ static void main_window_load(Window *window) {
   
   // Show the correct state of the BT connection from the start
   bluetooth_callback(connection_service_peek_pebble_app_connection());
+  
+  // Register for battery level updates
+  battery_state_service_subscribe(battery_callback);
 }
 
 static void main_window_unload(Window *window) {
