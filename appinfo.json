@@ -35,12 +35,6 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/bt-icon.png",
-                "name": "RESOURCE_ID_IMAGE_BT",
-                "targetPlatforms": null,
-                "type": "bitmap"
-            },
-            {
                 "file": "fonts/ROBO.ttf",
                 "name": "RESOURCE_ID_ROBO_42",
                 "targetPlatforms": null,

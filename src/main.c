@@ -3,8 +3,8 @@
 static Window *s_main_window;
 static TextLayer *s_time_layer, *s_date_layer;
 static GFont s_time_font, s_date_font, s_battery_font;
-static GBitmap *s_background_bitmap, *s_bt_icon_bitmap, *s_captain_bitmap, *s_empty_battery_bitmap;
-static BitmapLayer *s_background_layer, *s_bt_icon_layer, *s_captain_layer, *s_empty_battery_layer;
+static GBitmap *s_background_bitmap,*s_captain_bitmap, *s_empty_battery_bitmap;
+static BitmapLayer *s_background_layer, *s_captain_layer, *s_empty_battery_layer;
 static Layer *s_battery_level_layer;
 static int8_t switcher;
 static int s_battery_level;
@@ -48,9 +48,6 @@ static void battery_update_proc(Layer *layer, GContext *ctx){
 }
 
 static void bluetooth_callback(bool connected){
-  // Show icon if disconnected
-  layer_set_hidden(bitmap_layer_get_layer(s_bt_icon_layer), connected);
-    
   if(connected){
     text_layer_set_background_color(s_time_layer, GColorClear);
     text_layer_set_text_color(s_time_layer, GColorBlack);
@@ -120,13 +117,11 @@ static void main_window_load(Window *window) {
   
   // Create GBitmap
   s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_IMAGE_BACKGROUND);
-  s_bt_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_IMAGE_BT);
   s_captain_bitmap = gbitmap_create_with_resource(RESOURCE_ID_RESOURCE_ID_CAPTAIN);
   s_empty_battery_bitmap = gbitmap_create_with_resource(RESOURCE_ID_FULL_BATTERY);
   
   // Create BitmapLayer to display the GBitmap
   s_background_layer = bitmap_layer_create(bounds);
-  s_bt_icon_layer = bitmap_layer_create(GRect(114, 0, 30, 30));
   
   s_captain_layer = bitmap_layer_create(bounds);
   s_empty_battery_layer = bitmap_layer_create(GRect(110, 0, 34, 15));
@@ -138,9 +133,7 @@ static void main_window_load(Window *window) {
   //Iron man
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
-  //BT icon
-  bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
-  //layer_add_child(window_layer, bitmap_layer_get_layer(s_bt_icon_layer));
+  
   //Battery empty
   bitmap_layer_set_bitmap(s_empty_battery_layer, s_empty_battery_bitmap);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_empty_battery_layer));
@@ -178,13 +171,11 @@ static void main_window_unload(Window *window) {
   
   // Destroy GBitmap
   gbitmap_destroy(s_background_bitmap);
-  gbitmap_destroy(s_bt_icon_bitmap);
   gbitmap_destroy(s_captain_bitmap);
   gbitmap_destroy(s_empty_battery_bitmap);
   
   // Destroy BitmapLayer
   bitmap_layer_destroy(s_background_layer);
-  bitmap_layer_destroy(s_bt_icon_layer);
   bitmap_layer_destroy(s_captain_layer);
   bitmap_layer_destroy(s_empty_battery_layer);
   
