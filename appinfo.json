@@ -10,6 +10,18 @@
     "resources": {
         "media": [
             {
+                "file": "images/part.png",
+                "name": "BAT_PART",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
+                "file": "images/bat.png",
+                "name": "FULL_BATTERY",
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
                 "file": "images/captain.png",
                 "name": "RESOURCE_ID_CAPTAIN",
                 "targetPlatforms": null,
@@ -37,6 +49,12 @@
             {
                 "file": "fonts/ROBO.ttf",
                 "name": "RESOURCE_ID_ROBO_23",
+                "targetPlatforms": null,
+                "type": "font"
+            },
+            {
+                "file": "fonts/ROBO.ttf",
+                "name": "RESOURCE_ID_ROBO_11",
                 "targetPlatforms": null,
                 "type": "font"
             },
